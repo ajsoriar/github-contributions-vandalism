@@ -1,0 +1,26 @@
+
+/ ===
+/ git
+/ ===
+
+    # Add remote repo as origin
+    ---------------------------
+
+    > git remote add origin https://github.com/<USERNAME>/<REPONAME>.git
+
+
+
+/ ====
+/ UNIX
+/ ====
+
+    # Add day to date
+    -----------------
+
+    > date -j -v +1d  -f "%Y-%m-%d %H:%M:%S" "2010-05-07 22:13:16" +%Y-%m-%dT%H:%M:%S
+    > 2010-05-08T22:13:16
+
+
+
+
+
