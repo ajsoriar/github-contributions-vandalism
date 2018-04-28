@@ -41,22 +41,10 @@ git commit -am "Initial commit" --date "${var_start_date}" --author="${var_autho
 
 echo "go!"
 
-#while [ "$var_day" -lt 7 ] # this is loop1
 for (( i=1; i <= $var_days; ++i ))
 do
     echo ${i} 
-    #var_value= cat ${var_file_name} 
     echo ${i} $'\r' >> ${var_file_name}
     git add .
     git commit -m "${var_commit_message}" --date "${var_start_date}" --author="${var_author_name} <${var_author_mail}>"
-    #var_add= $var_value + 1
-    #echo ${var_value} 
-#   b="$var_day"
-#   while [ "$b" -ge 0 ]  # this is loop2
-#   do
-#      echo -n "$b "
-#      b=`expr $b - 1`
-#   done
-#   echo
-#   i=$((i + 1))
 done

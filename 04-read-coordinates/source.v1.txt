@@ -1,0 +1,12 @@
+# --------------------------
+# source file example
+# --------------------------
+# [index]|[iso-date]|[yyy-mm-dd]|[hh|mm|ss]|[author-name]|[mail]|[commit-message]
+#
+
+1|2010-05-08T22:13:16|2012-12-31|22:13:16|asr|mail-address|commit-message
+2|2010-05-08T22:13:16|2012-12-31|22:13:16|asr|mail-address|commit-message
+3|2010-05-08T22:13:16|2012-12-31|22:13:16|asr|mail-address|commit-message
+
+4|2010-05-08T22:13:16|2012-12-31|22:13:16|asr|mail-address|commit-message
+5|2010-05-08T22:13:16|2012-12-31|22:13:16|asr|mail-address|commit-message
