@@ -125,7 +125,7 @@ do
                                 var_increase_time=$((86400*$count_days+60*$count_commmits_in_day))
 
                                 echo "var_increase_time: ${var_increase_time}"
-                                var_Ymd=var_start_date #"2012-01-01"
+                                var_Ymd=${var_start_date} #"2012-01-01"
                                 var_HMS="12:00:00"
                                 var_date=$( date -j -v +"$var_increase_time"S -f "%Y-%m-%d %H:%M:%S" "$var_Ymd $var_HMS" +%Y-%m-%dT%H:%M:%S )
                                 echo "commit date: ${var_date}"
