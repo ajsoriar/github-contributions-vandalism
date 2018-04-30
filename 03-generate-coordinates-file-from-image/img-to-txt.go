@@ -64,17 +64,18 @@ func main() {
 			fmt.Printf("x: %d, ", x)
 			fmt.Printf("y: %d \n", y)
 
-			/*
-				r, g, b, a := m.At(x, y).RGBA()
-				// A color's RGBA method returns values in the range [0, 65535].
-				// Shifting by 12 reduces this to the range [0, 15].
+			r, g, b, a := m.At(x, y).RGBA()
+			// A color's RGBA method returns values in the range [0, 65535].
+			// Shifting by 12 reduces this to the range [0, 15].
 
+			//histogram[r>>12][0]++
+			//histogram[g>>12][1]++
+			//histogram[b>>12][2]++
+			//histogram[a>>12][3]++
 
-					histogram[r>>12][0]++
-					histogram[g>>12][1]++
-					histogram[b>>12][2]++
-					histogram[a>>12][3]++
-			*/
+			avg := 0
+			avg = (r + g + b) / 3
+			//return avg
 
 			// ---------------------
 			// Write to file
@@ -83,46 +84,14 @@ func main() {
 			writetofile(str)
 		}
 	}
-
-	/*
-
-		// Print the results.
-		fmt.Printf("%-14s %6s %6s %6s %6s\n", "bin", "red", "green", "blue", "alpha")
-		for i, x := range histogram {
-			fmt.Printf("0x%04x-0x%04x: %6d %6d %6d %6d\n", i<<12, (i+1)<<12-1, x[0], x[1], x[2], x[3])
-		}
-		// Output:
-		// bin               red  green   blue  alpha
-		// 0x0000-0x0fff:    364    790   7242      0
-		// 0x1000-0x1fff:    645   2967   1039      0
-		// 0x2000-0x2fff:   1072   2299    979      0
-		// 0x3000-0x3fff:    820   2266    980      0
-		// 0x4000-0x4fff:    537   1305    541      0
-		// 0x5000-0x5fff:    319    962    261      0
-		// 0x6000-0x6fff:    322    375    177      0
-		// 0x7000-0x7fff:    601    279    214      0
-		// 0x8000-0x8fff:   3478    227    273      0
-		// 0x9000-0x9fff:   2260    234    329      0
-		// 0xa000-0xafff:    921    282    373      0
-		// 0xb000-0xbfff:    321    335    397      0
-		// 0xc000-0xcfff:    229    388    298      0
-		// 0xd000-0xdfff:    260    414    277      0
-		// 0xe000-0xefff:    516    428    298      0
-		// 0xf000-0xffff:   2785   1899   1772  15450
-
-	*/
 }
 
-// ---------------------
-// Write to file
-// ---------------------
-
 /*
-
-t := time.Now()
-str := "[" + t.String() + "]" + "[" + myclientTimestamp + "]" + "[" + myparamType + "]" + "[" + myparamTag + "]" + " " + myparamText
-writetofile(str)
-
+func toGrayscale(r int, g int, b int) {
+	avg := 0
+	avg = (r + g + b) / 3
+	return avg
+}
 */
 
 /* ------------- */
@@ -167,13 +136,5 @@ App.ImageFilters.grayscale = function() {
     }
 
     ctx.putImageData(imageData, 0, 0);
-};
-*/
-
-/*
-func toGrayscale = function( r int,  g int,  b int ) {
-	avg := 0
-    avg = (r + g + b) / 3;
-	return avg
 };
 */
