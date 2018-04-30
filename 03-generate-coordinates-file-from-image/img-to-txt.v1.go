@@ -18,7 +18,7 @@ import (
 func main() {
 	// Decode the JPEG data. If reading from file, create a reader with
 
-	reader, err := os.Open("source.png")
+	reader, err := os.Open("hello-world.png")
 	if err != nil {
 		log.Fatal(err)
 	}

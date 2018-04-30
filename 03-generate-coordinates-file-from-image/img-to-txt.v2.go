@@ -47,18 +47,12 @@ func main() {
 	fmt.Printf("bounds.Max.X: %6s \n", bounds.Max.X)
 	fmt.Printf("\n")
 
-	// 1;6;5;asr;mail-address;commit-message
-
-	var colorRange = 1
-	var pixelCont = 0
-
 	//var histogram [16][4]int
-	for x := bounds.Min.X; x < bounds.Max.X; x++ {
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 
 		//fmt.Printf("y: %d \n", y)
-		for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 
-			pixelCont++
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 
 			//fmt.Printf("x: %d \n", x)
 			fmt.Printf("x: %d, ", x)
@@ -68,18 +62,19 @@ func main() {
 				r, g, b, a := m.At(x, y).RGBA()
 				// A color's RGBA method returns values in the range [0, 65535].
 				// Shifting by 12 reduces this to the range [0, 15].
-
-
-					histogram[r>>12][0]++
-					histogram[g>>12][1]++
-					histogram[b>>12][2]++
-					histogram[a>>12][3]++
+				histogram[r>>12][0]++
+				histogram[g>>12][1]++
+				histogram[b>>12][2]++
+				histogram[a>>12][3]++
 			*/
 
 			// ---------------------
 			// Write to file
 			// ---------------------
-			str := strconv.Itoa(pixelCont) + ";" + strconv.Itoa(x+1) + ";" + strconv.Itoa(y+1) + ";" + strconv.Itoa(colorRange) + ";null;null;null"
+
+			//t := time.Now()
+			str := "[" + strconv.Itoa(x) + "]" + "[" + strconv.Itoa(y) + "]" //"[" + myclientTimestamp + "]" + "[" + myparamType + "]" + "[" + myparamTag + "]" + " " + myparamText
+
 			writetofile(str)
 		}
 	}
