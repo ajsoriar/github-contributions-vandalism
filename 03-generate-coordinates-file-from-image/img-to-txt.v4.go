@@ -19,7 +19,7 @@ import (
 func main() {
 	// Decode the JPEG data. If reading from file, create a reader with
 
-	reader, err := os.Open("hello-rgb-2x7-14-github-colors.png")
+	reader, err := os.Open("hello-rgb-2x7-14.png")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,9 +47,8 @@ func main() {
 	fmt.Printf("bounds.Max.X: %6s \n", bounds.Max.X)
 	fmt.Printf("\n")
 
-	var colorRange = 0
+	var colorRange = 1
 	var pixelCont = 0
-	var average = 0
 
 	for x := bounds.Min.X; x < bounds.Max.X; x++ {
 
@@ -60,51 +59,7 @@ func main() {
 
 			r, g, b, a := m.At(x, y).RGBA()
 
-			average = (int(r) + int(g) + int(b)) / 3
-
-			/*
-				// github colors
-
-				238, 238, 238
-				198, 228, 138
-				122, 202, 111
-				36,  154, 59
-				26,  96,  39
-
-				R     G     B     A    (R+G+B/3)
-				61166 61166 61166 65535 61166 			65535 - 61166 = 4369
-				50886 58596 35466 65535 48316           61166 - 48316
-				31354 51914 28527 65535 37265
-				9252  39578 15163 65535 21331
-				6682  24672 10023 65535 13792
-
-			*/
-
-			colorRange = 0
-
-			// if ( 61166 + 4369 > average && average > 61166 - 4369 ) colorRange = 0
-			// if ( 48316 + 4369 > average && average > 48316 - 4369 ) colorRange = 1
-			// if ( 37265 + 4369 > average && average > 37265 - 4369 ) colorRange = 2
-			// if ( 21331 + 4369 > average && average > 21331 - 4369 ) colorRange = 3
-			// if ( 13792 + 4369 > average && average > 13792 - 4369 ) colorRange = 4
-
-			if 61166+4369 > average && average > 61166-4369 {
-				colorRange = 0
-			}
-			if 48316+4369 > average && average > 48316-4369 {
-				colorRange = 1
-			}
-			if 37265+4369 > average && average > 37265-4369 {
-				colorRange = 2
-			}
-			if 21331+4369 > average && average > 21331-4369 {
-				colorRange = 3
-			}
-			if 13792+4369 > average && average > 13792-4369 {
-				colorRange = 4
-			}
-
-			fmt.Printf("%v %v %v %v %v %v %v\n", pixelCont, r, g, b, a, average, colorRange)
+			fmt.Printf("%v %v %v %v\n", r, g, b, a)
 
 			// ---------------------
 			// Write to file
