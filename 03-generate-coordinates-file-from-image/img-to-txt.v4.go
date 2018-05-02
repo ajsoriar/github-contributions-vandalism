@@ -17,35 +17,9 @@ import (
 )
 
 func main() {
-
-	argsNum := len(os.Args)
-	fmt.Println("Args num: ", argsNum)
-
-	file1 := "./hello-rgb-2x7-14-github-colors.png"
-	file2 := "./output.txt"
-
-	if argsNum == 1 { // no params
-
-	} else if argsNum == 2 { // Input file was provided
-
-		file1 = os.Args[1]
-
-	} else if argsNum == 3 { // Input and Output files were provided
-
-		file1 = os.Args[1]
-		file2 = os.Args[2]
-
-	} else {
-
-		// many parameters, do nothing!
-	}
-
-	fmt.Println("input file: ", file1)
-	fmt.Println("output file: ", file2)
-
 	// Decode the JPEG data. If reading from file, create a reader with
 
-	reader, err := os.Open(file1)
+	reader, err := os.Open("hello-rgb-2x7-14.png")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -73,9 +47,8 @@ func main() {
 	fmt.Printf("bounds.Max.X: %6s \n", bounds.Max.X)
 	fmt.Printf("\n")
 
-	var colorRange = 0
+	var colorRange = 1
 	var pixelCont = 0
-	var average = 0
 
 	for x := bounds.Min.X; x < bounds.Max.X; x++ {
 
@@ -86,58 +59,14 @@ func main() {
 
 			r, g, b, a := m.At(x, y).RGBA()
 
-			average = (int(r) + int(g) + int(b)) / 3
-
-			/*
-				// github colors
-
-				238, 238, 238
-				198, 228, 138
-				122, 202, 111
-				36,  154, 59
-				26,  96,  39
-
-				R     G     B     A    (R+G+B/3)
-				61166 61166 61166 65535 61166 			65535 - 61166 = 4369
-				50886 58596 35466 65535 48316           61166 - 48316
-				31354 51914 28527 65535 37265
-				9252  39578 15163 65535 21331
-				6682  24672 10023 65535 13792
-
-			*/
-
-			colorRange = 0
-
-			// if ( 61166 + 4369 > average && average > 61166 - 4369 ) colorRange = 0
-			// if ( 48316 + 4369 > average && average > 48316 - 4369 ) colorRange = 1
-			// if ( 37265 + 4369 > average && average > 37265 - 4369 ) colorRange = 2
-			// if ( 21331 + 4369 > average && average > 21331 - 4369 ) colorRange = 3
-			// if ( 13792 + 4369 > average && average > 13792 - 4369 ) colorRange = 4
-
-			if 61166+4369 > average && average > 61166-4369 {
-				colorRange = 0
-			}
-			if 48316+4369 > average && average > 48316-4369 {
-				colorRange = 1
-			}
-			if 37265+4369 > average && average > 37265-4369 {
-				colorRange = 2
-			}
-			if 21331+4369 > average && average > 21331-4369 {
-				colorRange = 3
-			}
-			if 13792+4369 > average && average > 13792-4369 {
-				colorRange = 4
-			}
-
-			fmt.Printf("%v %v %v %v %v %v %v\n", pixelCont, r, g, b, a, average, colorRange)
+			fmt.Printf("%v %v %v %v\n", r, g, b, a)
 
 			// ---------------------
 			// Write to file
 			// ---------------------
 			//str := strconv.Itoa(pixelCont) + ";" + strconv.Itoa(x+1) + ";" + strconv.Itoa(y+1) + ";" + strconv.Itoa(colorRange) + ";null;null;null"
 			str := strconv.Itoa(pixelCont) + ";" + strconv.Itoa(x+1) + ";" + strconv.Itoa(y+1) + ";" + strconv.FormatUint(uint64(r), 10) + ";" + strconv.FormatUint(uint64(g), 10) + ";" + strconv.FormatUint(uint64(b), 10) + ";" + strconv.FormatUint(uint64(a), 10) + ";" + strconv.Itoa(colorRange) + ";null;null;null"
-			writetofile(str, file2)
+			writetofile(str)
 
 		} // y
 	} // x
@@ -147,12 +76,12 @@ func main() {
 /* WRITE TO FILE */
 /* ------------- */
 
-func writetofile(somethingToWrite string, file2 string) {
+func writetofile(somethingToWrite string) {
 
 	// https://golang.org/pkg/os/#OpenFile
 
 	// If the file doesn't exist, create it, or append to the file
-	f, err := os.OpenFile(file2, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile("./output.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
