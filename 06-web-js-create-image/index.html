@@ -154,7 +154,7 @@
 
             $scope.paint = function( lastWeek, lastDay ){
                 console.log("lastWeek:", lastWeek, ", lastDay:", lastDay )
-                $scope.currentColor = colorValue;
+                //$scope.currentColor = colorValue;
                 $scope.lastWeek = lastWeek;
                 $scope.lastDay = lastDay;
             }
@@ -188,16 +188,16 @@
                 <svg width="676" height="104" class="js-calendar-graph-svg">
                     <g transform="translate(16, 20)">
                         <g id="{{$index}}" ng-attr-transform="translate({{ (($index) * 12 + 13) }} , 0)" ng-repeat="i in getNumber(number) track by $index">
-                            <rect ng-click="paint(i,1)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="0" fill="#ebedf0" data-count="0" data-date="2017-04-30"></rect>
-                            <rect ng-click="paint(i,2)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="12" fill="#ebedf0" data-count="0" data-date="2017-05-01"></rect>
-                            <rect ng-click="paint(i,3)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="24" fill="#ebedf0" data-count="0" data-date="2017-05-02"></rect>
-                            <rect ng-click="paint(i,4)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="36" fill="#ebedf0" data-count="0" data-date="2017-05-03"></rect>
-                            <rect ng-click="paint(i,5)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="48" fill="#ebedf0" data-count="0" data-date="2017-05-04"></rect>
-                            <rect ng-click="paint(i,6)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="60" fill="#ebedf0" data-count="0" data-date="2017-05-05"></rect>
-                            <rect ng-click="paint(i,7)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="72" fill="#ebedf0" data-count="0" data-date="2017-05-06"></rect>
+                            <rect ng-click="paint($index,1)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="0" fill="#ebedf0" data-count="0" data-date="2017-04-30"></rect>
+                            <rect ng-click="paint($index,2)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="12" fill="#ebedf0" data-count="0" data-date="2017-05-01"></rect>
+                            <rect ng-click="paint($index,3)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="24" fill="#ebedf0" data-count="0" data-date="2017-05-02"></rect>
+                            <rect ng-click="paint($index,4)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="36" fill="#ebedf0" data-count="0" data-date="2017-05-03"></rect>
+                            <rect ng-click="paint($index,5)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="48" fill="#ebedf0" data-count="0" data-date="2017-05-04"></rect>
+                            <rect ng-click="paint($index,6)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="60" fill="#ebedf0" data-count="0" data-date="2017-05-05"></rect>
+                            <rect ng-click="paint($index,7)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="72" fill="#ebedf0" data-count="0" data-date="2017-05-06"></rect>
                         </g>
 
-                        <text x="{{ 25 + (52 * ($index -1 )) }}" y="-10" class="month" ng-repeat="month in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] track by $index">{{month}}</text>
+                        <text ng-attr-x="{{ 25 + (52 * ($index -1 )) }}" y="-10" class="month" ng-repeat="month in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] track by $index">{{month}}</text>
 
                         <text text-anchor="start" class="wday" dx="-14" dy="8" style="display: none;">Sun</text>
                         <text text-anchor="start" class="wday" dx="-14" dy="20">Mon</text>
