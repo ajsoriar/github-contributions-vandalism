@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>GitHub Paint! v.1</title>
     <script src="./angular.js"></script>
+    <script src="./jquery.js"></script>
     <style>
         .pl-2 {
             padding-left: 8px !important;
@@ -129,53 +130,157 @@
             width: 700px;
         }
 
-        #currentColor{
+        #currentColor {
             display: block;
             width: 150px;
             height: 150px;
             border: 1px solid black;
         }
-
     </style>
+
     <script>
+
+        // How to extract color values from rgb string in javascript
+
+        // https://stackoverflow.com/questions/34980574/how-to-extract-color-values-from-rgb-string-in-javascript
+
+        function getRGB(str) {
+            var match = str.match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
+            return match ? {
+                red: match[1],
+                green: match[2],
+                blue: match[3]
+            } : {};
+        }
+
+        // examples:
+
+        // console.log(getRGB("rgb(211, 211, 211)"));
+        // console.log(getRGB("rgba(211, 0, 211, 0.5)"));
+
+        // How to extract color values from rgb string in javascript
+
+
+        var NUM_OF_WEEKS = 53;
         var myApp = angular.module('myApp', []);
         myApp.controller('AppController', ['$scope', function ($scope) {
+
+            $scope.output = '# ----------------------\n' +
+                            '# ----------------------';
+
             $scope.greeting = 'Hola!';
             $scope.contributions_num = '0';
             $scope.currentColor = "#196127";
-
             $scope.lastWeek = 0;
             $scope.lastDay = 0;
 
-
-            $scope.setColor = function( colorValue ){
+            $scope.setColor = function (colorValue) {
                 $scope.currentColor = colorValue;
             }
 
-            $scope.paint = function( lastWeek, lastDay ){
-                console.log("lastWeek:", lastWeek, ", lastDay:", lastDay )
-                //$scope.currentColor = colorValue;
+            $scope.paint = function (lastWeek, lastDay, event) {
+                console.log("lastWeek:", lastWeek, ", lastDay:", lastDay);
+                console.log("event:", event);
                 $scope.lastWeek = lastWeek;
                 $scope.lastDay = lastDay;
+                //$(event.target).css('background-color', $scope.currentColor );
+                $(event.target).css('fill', $scope.currentColor); // fill
             }
-            
+
+            /*
+				// github colors
+
+				238, 238, 238
+				198, 228, 138
+				122, 202, 111
+				36,  154, 59
+                26,  96,  39
+            */
+
+            $scope.generateOutput = function(){
+                var str = '';
+                var week = 0
+                var dayInWeek = 0
+                var cont = 0;
+                for (i=0;i<NUM_OF_WEEKS;i++){
+
+                    str += '\n# ------ week '+ (i+1) +' ------'
+
+                    for (j=0;j<7;j++){
+                        cont++;
+                        // 21;3;7;65535;65535;65535;65535;0;null;null;null
+                        //str += '\n'+ cont +';'+ i +';'+ j +';65535;65535;65535;65535;0;null;null;null'
+                        //str += '\n'+ cont +';'+ i +';'+ j +';R;G;B;A;0;null;null;null'
+                        var dayEl = document.getElementById("week-"+ i +"-"+ (j+1) );
+                        var fill = $(dayEl).css("fill");
+                        console.log(getRGB( fill ) );
+                        str += '\n'+ cont +';'+ i +';'+ j +';65535;65535;65535;65535;0;null;null;null';
+
+                        /*
+                        // 21;3;7;65535;65535;65535;65535;0;null;null;null
+                        //str += '\n'+ cont +';'+ i +';'+ j +';65535;65535;65535;65535;0;null;null;null'
+                        //str += '\n'+ cont +';'+ i +';'+ j +';R;G;B;A;0;null;null;null'
+                        // week-{{$index}}-1
+                        var dayEl = document.getElementById("week-"+ i +"-"+ (j+1) );
+                        var fill = $(dayEl).css("fill");
+                        //fill = getRGB( fill );
+                        //var a = 1;
+                        //str += '\n'+ cont +';'+ i +';'+ j +';'+ fill.red +','+ fill.green +','+ fill.blue +','+ a +','+ 0 +',null;null;null'
+                        */
+                    }
+                }
+                str += '\n# The end!';
+                $scope.output = $scope.output + str;
+            }
+
+            $scope.reset = function( color ){
+                for (i=0;i<NUM_OF_WEEKS;i++){
+                    for (j=0;j<7;j++){
+                        var dayEl = document.getElementById("week-"+ i +"-"+ (j+1) );
+                        $(dayEl).attr("fill", color ); 
+                        $(dayEl).css("fill", color );
+                    }
+                }
+                var str = '';
+                $scope.output = + str;
+            }
+
         }]);
         myApp.controller('GreetingController', ['$scope', function ($scope) {
             $scope.greeting = 'Hola!';
         }]);
         myApp.controller('ViewerController', ['$scope', function ($scope) {
-            $scope.number = 54;
-            $scope.getNumber = function(num) {
-                return new Array(num);   
+            $scope.number = NUM_OF_WEEKS;
+            $scope.getNumber = function (num) {
+                return new Array(num);
             }
         }]);
         myApp.controller('MenuController', ['$scope', function ($scope) {
 
         }]);
+
     </script>
 </head>
 
 <body ng-controller="AppController">
+
+
+    <div>
+        <label for="">Current color:</label>
+        <div>
+            <div id="currentColor" ng-style="{'background-color':currentColor}"></div>
+            {{currentColor}}
+        </div>
+    </div>
+
+    <div>
+        <label for=""> lastWeek, lastDay</label>
+        <div>
+            {{lastWeek}}, {{lastDay}}
+        </div>
+    </div>
+
+
     <div class="js-contribution-graph ">
 
         <h2 class="f4 text-normal mb-2">
@@ -187,14 +292,21 @@
                 data-url="/ajsoriar" data-from="2018-05-01" data-to="2018-05-05">
                 <svg width="676" height="104" class="js-calendar-graph-svg">
                     <g transform="translate(16, 20)">
-                        <g id="{{$index}}" ng-attr-transform="translate({{ (($index) * 12 + 13) }} , 0)" ng-repeat="i in getNumber(number) track by $index">
-                            <rect ng-click="paint($index,1)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="0" fill="#ebedf0" data-count="0" data-date="2017-04-30"></rect>
-                            <rect ng-click="paint($index,2)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="12" fill="#ebedf0" data-count="0" data-date="2017-05-01"></rect>
-                            <rect ng-click="paint($index,3)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="24" fill="#ebedf0" data-count="0" data-date="2017-05-02"></rect>
-                            <rect ng-click="paint($index,4)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="36" fill="#ebedf0" data-count="0" data-date="2017-05-03"></rect>
-                            <rect ng-click="paint($index,5)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="48" fill="#ebedf0" data-count="0" data-date="2017-05-04"></rect>
-                            <rect ng-click="paint($index,6)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="60" fill="#ebedf0" data-count="0" data-date="2017-05-05"></rect>
-                            <rect ng-click="paint($index,7)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="72" fill="#ebedf0" data-count="0" data-date="2017-05-06"></rect>
+                        <g id="week-{{$index}}" ng-attr-transform="translate({{ (($index) * 12 + 13) }} , 0)" ng-repeat="i in getNumber(number) track by $index">
+                            <rect id="week-{{$index}}-1" ng-click="paint($index,1,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="0" fill="#ebedf0" data-count="0"
+                                data-date="2017-04-30"></rect>
+                            <rect id="week-{{$index}}-2" ng-click="paint($index,2,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="12" fill="#ebedf0" data-count="0"
+                                data-date="2017-05-01"></rect>
+                            <rect id="week-{{$index}}-3" ng-click="paint($index,3,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="24" fill="#ebedf0" data-count="0"
+                                data-date="2017-05-02"></rect>
+                            <rect id="week-{{$index}}-4" ng-click="paint($index,4,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="36" fill="#ebedf0" data-count="0"
+                                data-date="2017-05-03"></rect>
+                            <rect id="week-{{$index}}-5" ng-click="paint($index,5,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="48" fill="#ebedf0" data-count="0"
+                                data-date="2017-05-04"></rect>
+                            <rect id="week-{{$index}}-6" ng-click="paint($index,6,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="60" fill="#ebedf0" data-count="0"
+                                data-date="2017-05-05"></rect>
+                            <rect id="week-{{$index}}-7" ng-click="paint($index,7,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="72" fill="#ebedf0" data-count="0"
+                                data-date="2017-05-06"></rect>
                         </g>
 
                         <text ng-attr-x="{{ 25 + (52 * ($index -1 )) }}" y="-10" class="month" ng-repeat="month in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] track by $index">{{month}}</text>
@@ -209,33 +321,9 @@
                     </g>
                 </svg>
 
-<!--
-                <svg width="676" height="104" class="js-calendar-graph-svg">
-                        <g transform="translate(16, 20)">
-                            <g ng-attr-transform="translate({{ (($indexA) * 12 + 13) }} , 0)" ng-repeat="i in getNumber(number) track by $indexA">
-    
-                                
-                                <rect class="day" width="10" height="10" ng-attr-x="{{ $indexB }}" ng-attr-y="{{ ( $indexB * 12) }} " fill="#ebedf0" data-count="0" data-date="2017-04-30" ng-repeat="day in [1,2,3,4,5,6,7] track by $indexB"></rect>
-
-                            </g>
-    
-                            <text ng-attr-x="{{ 25 + (52 * ($indexC -1 )) }}" y="-10" class="month" ng-repeat="month in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] track by $indexC">{{month}}</text>
-
-                            <text text-anchor="start" class="wday" dx="-14" dy="8" style="display: none;">Sun</text>
-                            <text text-anchor="start" class="wday" dx="-14" dy="20">Mon</text>
-                            <text text-anchor="start" class="wday" dx="-14" dy="32" style="display: none;">Tue</text>
-                            <text text-anchor="start" class="wday" dx="-14" dy="44">Wed</text>
-                            <text text-anchor="start" class="wday" dx="-14" dy="57" style="display: none;">Thu</text>
-                            <text text-anchor="start" class="wday" dx="-14" dy="69">Fri</text>
-                            <text text-anchor="start" class="wday" dx="-14" dy="81" style="display: none;">Sat</text>
-                        </g>
-                    </svg>
-    -->
-
             </div>
             <div class="contrib-footer clearfix mt-1 mx-3 px-3 pb-1">
                 <div class="float-left text-gray">
-
 
                     <a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile">
                         Learn how we count contributions</a>.
@@ -256,46 +344,32 @@
         </div>
     </div>
 
+    <input type="button" value="Reset" ng-click="reset('#fff')" />
+
+
+
     <div>
-        <label for="">Current color:</label>
+        <label for="">From:</label>
         <div>
-                <div id="currentColor" ng-style="{'background-color':currentColor}"></div>
-                {{currentColor}}
+            <input id="date" type="date">
         </div>
     </div>
 
     <div>
-            <label for=""> lastWeek, lastDay</label>
-            <div>
-                    {{lastWeek}}, {{lastDay}}
-            </div>
-        </div>
-
-    <div>
-        <label for="">Sunday Date</label>
+        <label for="">To:</label>
         <div>
-                <div id="datepicker"></div>
-                <script>
-                //$( "#datepicker" ).datepicker();
-                </script>
+            <input id="date" type="date">
         </div>
     </div>
 
-    <div ng-controller="GreetingController">
-        {{ greeting }}
-    </div>
 
-    <div ng-controller="MenuController">
-        <button value="Reset"></button>
-        <form ng-submit="todoList.addTodo()">
-            <input type="text" ng-model="todoList.todoText" size="30" placeholder="add new todo here">
-            <input class="btn-primary" type="submit" value="add">
-        </form>
-    </div>
+    <input type="button" value="Generate" ng-click="generateOutput()" />
 
+    <br>
+    <hr>
+
+    <textarea name="" id="" cols="30" rows="10" style="width: 90%">{{output}}</textarea>
 
 </body>
-
-
 
 </html>

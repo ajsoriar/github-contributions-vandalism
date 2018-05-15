@@ -114,6 +114,10 @@ func main() {
 			// if ( 21331 + 4369 > average && average > 21331 - 4369 ) colorRange = 3
 			// if ( 13792 + 4369 > average && average > 13792 - 4369 ) colorRange = 4
 
+			// TODO: Allow grayscale images:
+			// 5;1;5;54998;54998;54998;65535;0;null;null;null ( 54998 + 54998 + 54998 ) / 3 = 54998 // this should return 1 and returns 0
+			// 10 3341 3084 3598 65535 3341 0 // this should return 5 and returns 0
+
 			if 61166+4369 > average && average > 61166-4369 {
 				colorRange = 0
 			}
