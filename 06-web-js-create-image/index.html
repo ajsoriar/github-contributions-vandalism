@@ -58,6 +58,15 @@
             line-height: 1.5;
             color: #24292e;
             background-color: #fff;
+            background-color: #dcd4d4;
+            padding: 0;
+            margin: 0;
+        }
+
+        table {
+            border: 1px solid black;
+            background-color: pink;
+            margin: 10px;
         }
 
         a {
@@ -93,7 +102,7 @@
         }
 
         .contrib-footer {
-            padding: 0 10px 12px;
+            padding: 5px 23px 20px 23px;
             font-size: 11px;
         }
 
@@ -103,6 +112,7 @@
             display: inline-block;
             margin: 0 5px;
             list-style: none;
+            padding: 0;
         }
 
         .contrib-legend .legend li {
@@ -119,6 +129,9 @@
         .calendar-graph text.month {
             font-size: 10px;
             fill: #767676;
+            background-color: darkred;
+            transform: translateX(53px);
+            position: relative;
         }
 
         .graph-canvas {
@@ -127,7 +140,7 @@
 
         .js-contribution-graph {
             margin: 0;
-            width: 700px;
+            width: 726px;
         }
 
         #currentColor {
@@ -136,55 +149,97 @@
             height: 150px;
             border: 1px solid black;
         }
+
+        .mini-help {
+            font-size: 10px;
+        }
+
+        #result-img {
+            width: 53px;
+            height: 7px;
+            border: unset;
+            transform: scale(5);
+            background-color: #ebedf0;
+            box-shadow: 0 0 0.1px #00BCD4;
+            margin: 20px;
+            left: 109px;
+            position: relative;
+        }
+
+        .text-result-1 {
+            width: 40%;
+            min-height: 350px;
+        }
+
+        .text-result-2 {
+            width: 60%;
+            min-height: 350px;
+            position: absolute;
+        }
     </style>
 
     <script>
-
-        // How to extract color values from rgb string in javascript
-
-        // https://stackoverflow.com/questions/34980574/how-to-extract-color-values-from-rgb-string-in-javascript
+        var NUM_OF_WEEKS = 53;
+        var START_DATE = "06/01/2013";
 
         function getRGB(str) {
             var match = str.match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
             return match ? {
-                red: match[1],
-                green: match[2],
-                blue: match[3]
+                R: match[1],
+                G: match[2],
+                B: match[3],
+                A: 1
             } : {};
         }
 
-        // examples:
+        function getHeader(startDate) {
+            if (startDate == null) startDate = START_DATE;
+            var h = ''
+                + '# ----------------------\n'
+                + '#  All starts here      \n'
+                + '# ----------------------\n'
+                + '#_START_DATE:' + startDate + '\n'
+                + '# ----------------------\n'
+                + '';
+            return h
+        }
 
-        // console.log(getRGB("rgb(211, 211, 211)"));
-        // console.log(getRGB("rgba(211, 0, 211, 0.5)"));
 
-        // How to extract color values from rgb string in javascript
-
-
-        var NUM_OF_WEEKS = 53;
         var myApp = angular.module('myApp', []);
         myApp.controller('AppController', ['$scope', function ($scope) {
 
-            $scope.output = '# ----------------------\n' +
-                            '# ----------------------';
+            $scope.first_comit_date = START_DATE; //"06/01/2013"; // this day should be sunday
+            $scope.val_mail = "e mail addres";
+            $scope.val_author = "your name here";
+            $scope.val_weeks_num = NUM_OF_WEEKS;
+
+            $scope.output = getHeader();
 
             $scope.greeting = 'Hola!';
             $scope.contributions_num = '0';
-            $scope.currentColor = "#196127";
+            $scope.currentColor = {
+                color: "#196127",
+                commits: 4
+            };
             $scope.lastWeek = 0;
             $scope.lastDay = 0;
-
-            $scope.setColor = function (colorValue) {
-                $scope.currentColor = colorValue;
+            $scope.setColor = function (colorValue, commits) {
+                $scope.currentColor = {
+                    color: colorValue,
+                    commits: commits
+                };
+                console.log("$scope.currentColor:", $scope.currentColor);
             }
-
             $scope.paint = function (lastWeek, lastDay, event) {
                 console.log("lastWeek:", lastWeek, ", lastDay:", lastDay);
                 console.log("event:", event);
                 $scope.lastWeek = lastWeek;
                 $scope.lastDay = lastDay;
-                //$(event.target).css('background-color', $scope.currentColor );
-                $(event.target).css('fill', $scope.currentColor); // fill
+
+                $(event.target).css('fill', $scope.currentColor.color);
+                $(event.target).attr('data-commits', $scope.currentColor.commits);
+
+
             }
 
             /*
@@ -197,52 +252,45 @@
                 26,  96,  39
             */
 
-            $scope.generateOutput = function(){
+            $scope.generateOutput = function () {
                 var str = '';
                 var week = 0
                 var dayInWeek = 0
                 var cont = 0;
-                for (i=0;i<NUM_OF_WEEKS;i++){
+                for (i = 0; i < $scope.val_weeks_num; i++) {
 
-                    str += '\n# ------ week '+ (i+1) +' ------'
+                    str += '\n# ------ week ' + (i + 1) + ' ------'
 
-                    for (j=0;j<7;j++){
+                    for (j = 0; j < 7; j++) {
                         cont++;
                         // 21;3;7;65535;65535;65535;65535;0;null;null;null
                         //str += '\n'+ cont +';'+ i +';'+ j +';65535;65535;65535;65535;0;null;null;null'
                         //str += '\n'+ cont +';'+ i +';'+ j +';R;G;B;A;0;null;null;null'
-                        var dayEl = document.getElementById("week-"+ i +"-"+ (j+1) );
+                        var dayEl = document.getElementById("week-" + i + "-" + (j + 1));
                         var fill = $(dayEl).css("fill");
-                        console.log(getRGB( fill ) );
-                        str += '\n'+ cont +';'+ i +';'+ j +';65535;65535;65535;65535;0;null;null;null';
-
-                        /*
-                        // 21;3;7;65535;65535;65535;65535;0;null;null;null
-                        //str += '\n'+ cont +';'+ i +';'+ j +';65535;65535;65535;65535;0;null;null;null'
-                        //str += '\n'+ cont +';'+ i +';'+ j +';R;G;B;A;0;null;null;null'
-                        // week-{{$index}}-1
-                        var dayEl = document.getElementById("week-"+ i +"-"+ (j+1) );
-                        var fill = $(dayEl).css("fill");
-                        //fill = getRGB( fill );
-                        //var a = 1;
-                        //str += '\n'+ cont +';'+ i +';'+ j +';'+ fill.red +','+ fill.green +','+ fill.blue +','+ a +','+ 0 +',null;null;null'
-                        */
+                        var obj = $(dayEl);
+                        //console.log("obj:", obj);
+                        var commitsColor = 0;
+                        if (obj[0].attributes["data-commits"] != undefined) commitsColor = obj[0].attributes["data-commits"].value || 0;
+                        //console.log(getRGB( fill ) );
+                        var col = getRGB(fill);
+                        var commitDate = null;
+                        str += '\n' + cont + ';' + i + ';' + j + ';' + col.R + ';' + col.G + ';' + col.B + ';' + col.A + ';' + commitsColor + ';' + $scope.val_mail + ';' + $scope.val_author + ';' + commitDate;
                     }
                 }
                 str += '\n# The end!';
                 $scope.output = $scope.output + str;
             }
 
-            $scope.reset = function( color ){
-                for (i=0;i<NUM_OF_WEEKS;i++){
-                    for (j=0;j<7;j++){
-                        var dayEl = document.getElementById("week-"+ i +"-"+ (j+1) );
-                        $(dayEl).attr("fill", color ); 
-                        $(dayEl).css("fill", color );
+            $scope.reset = function (color) {
+                for (i = 0; i < $scope.val_weeks_num; i++) {
+                    for (j = 0; j < 7; j++) {
+                        var dayEl = document.getElementById("week-" + i + "-" + (j + 1));
+                        $(dayEl).attr("fill", color);
+                        $(dayEl).css("fill", color);
                     }
                 }
-                var str = '';
-                $scope.output = + str;
+                $scope.output = getHeader();
             }
 
         }]);
@@ -268,7 +316,7 @@
     <div>
         <label for="">Current color:</label>
         <div>
-            <div id="currentColor" ng-style="{'background-color':currentColor}"></div>
+            <div id="currentColor" ng-style="{'background-color':currentColor.color}"></div>
             {{currentColor}}
         </div>
     </div>
@@ -280,95 +328,115 @@
         </div>
     </div>
 
+    <div style="width: 100%;
+    background-color: #f3f3f3;
+    padding: 5px 25px;">
+        <div class="js-contribution-graph ">
 
-    <div class="js-contribution-graph ">
+            <h2 class="f4 text-normal mb-2">
+                {{ contributions_num }} contributions in the last year
+            </h2>
 
-        <h2 class="f4 text-normal mb-2">
-            {{ contributions_num }} contributions in the last year
-        </h2>
 
-        <div class="mb-5 border border-gray-dark rounded-1 py-2" ng-controller="ViewerController">
-            <div class="js-calendar-graph is-graph-loading graph-canvas calendar-graph height-full" data-graph-url="/users/ajsoriar/contributions"
-                data-url="/ajsoriar" data-from="2018-05-01" data-to="2018-05-05">
-                <svg width="676" height="104" class="js-calendar-graph-svg">
-                    <g transform="translate(16, 20)">
-                        <g id="week-{{$index}}" ng-attr-transform="translate({{ (($index) * 12 + 13) }} , 0)" ng-repeat="i in getNumber(number) track by $index">
-                            <rect id="week-{{$index}}-1" ng-click="paint($index,1,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="0" fill="#ebedf0" data-count="0"
-                                data-date="2017-04-30"></rect>
-                            <rect id="week-{{$index}}-2" ng-click="paint($index,2,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="12" fill="#ebedf0" data-count="0"
-                                data-date="2017-05-01"></rect>
-                            <rect id="week-{{$index}}-3" ng-click="paint($index,3,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="24" fill="#ebedf0" data-count="0"
-                                data-date="2017-05-02"></rect>
-                            <rect id="week-{{$index}}-4" ng-click="paint($index,4,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="36" fill="#ebedf0" data-count="0"
-                                data-date="2017-05-03"></rect>
-                            <rect id="week-{{$index}}-5" ng-click="paint($index,5,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="48" fill="#ebedf0" data-count="0"
-                                data-date="2017-05-04"></rect>
-                            <rect id="week-{{$index}}-6" ng-click="paint($index,6,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="60" fill="#ebedf0" data-count="0"
-                                data-date="2017-05-05"></rect>
-                            <rect id="week-{{$index}}-7" ng-click="paint($index,7,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="72" fill="#ebedf0" data-count="0"
-                                data-date="2017-05-06"></rect>
+            <div class="mb-5 border border-gray-dark rounded-1 py-2" style="background-color: white;" ng-controller="ViewerController">
+                <div class="js-calendar-graph is-graph-loading graph-canvas calendar-graph height-full" data-graph-url="/users/ajsoriar/contributions"
+                    data-url="/ajsoriar" data-from="2018-05-01" data-to="2018-05-05">
+                    <svg width="676" height="104" class="js-calendar-graph-svg">
+                        <g transform="translate(16, 20)">
+                            <g id="week-{{$index}}" ng-attr-transform="translate({{ (($index) * 12 + 13) }} , 0)" ng-repeat="i in getNumber(number) track by $index">
+                                <rect id="week-{{$index}}-1" ng-click="paint($index,1,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
+                                    y="0" fill="#ebedf0" data-count="0" data-date="2017-04-30"></rect>
+                                <rect id="week-{{$index}}-2" ng-click="paint($index,2,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
+                                    y="12" fill="#ebedf0" data-count="0" data-date="2017-05-01"></rect>
+                                <rect id="week-{{$index}}-3" ng-click="paint($index,3,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
+                                    y="24" fill="#ebedf0" data-count="0" data-date="2017-05-02"></rect>
+                                <rect id="week-{{$index}}-4" ng-click="paint($index,4,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
+                                    y="36" fill="#ebedf0" data-count="0" data-date="2017-05-03"></rect>
+                                <rect id="week-{{$index}}-5" ng-click="paint($index,5,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
+                                    y="48" fill="#ebedf0" data-count="0" data-date="2017-05-04"></rect>
+                                <rect id="week-{{$index}}-6" ng-click="paint($index,6,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
+                                    y="60" fill="#ebedf0" data-count="0" data-date="2017-05-05"></rect>
+                                <rect id="week-{{$index}}-7" ng-click="paint($index,7,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
+                                    y="72" fill="#ebedf0" data-count="0" data-date="2017-05-06"></rect>
+                            </g>
+
+                            <text ng-attr-x="{{ 25 + (52 * ($index -1 )) }}" y="-10" class="month" ng-repeat="month in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] track by $index">{{month}}</text>
+
+                            <text text-anchor="start" class="wday" dx="-14" dy="8" style="display: none;">Sun</text>
+                            <text text-anchor="start" class="wday" dx="-14" dy="20">Mon</text>
+                            <text text-anchor="start" class="wday" dx="-14" dy="32" style="display: none;">Tue</text>
+                            <text text-anchor="start" class="wday" dx="-14" dy="44">Wed</text>
+                            <text text-anchor="start" class="wday" dx="-14" dy="57" style="display: none;">Thu</text>
+                            <text text-anchor="start" class="wday" dx="-14" dy="69">Fri</text>
+                            <text text-anchor="start" class="wday" dx="-14" dy="81" style="display: none;">Sat</text>
                         </g>
+                    </svg>
 
-                        <text ng-attr-x="{{ 25 + (52 * ($index -1 )) }}" y="-10" class="month" ng-repeat="month in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] track by $index">{{month}}</text>
+                </div>
+                <div class="contrib-footer clearfix mt-1 mx-3 px-3 pb-1">
+                    <div class="float-left text-gray">
 
-                        <text text-anchor="start" class="wday" dx="-14" dy="8" style="display: none;">Sun</text>
-                        <text text-anchor="start" class="wday" dx="-14" dy="20">Mon</text>
-                        <text text-anchor="start" class="wday" dx="-14" dy="32" style="display: none;">Tue</text>
-                        <text text-anchor="start" class="wday" dx="-14" dy="44">Wed</text>
-                        <text text-anchor="start" class="wday" dx="-14" dy="57" style="display: none;">Thu</text>
-                        <text text-anchor="start" class="wday" dx="-14" dy="69">Fri</text>
-                        <text text-anchor="start" class="wday" dx="-14" dy="81" style="display: none;">Sat</text>
-                    </g>
-                </svg>
+                        <a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile">
+                            Learn how we count contributions</a>.
+                    </div>
+                    <div class="contrib-legend text-gray" title="A summary of pull requests, issues opened, and commits to the default and gh-pages branches.">Less
+                        <ul class="legend">
+                            <li style="background-color: #eee" ng-click="setColor('#eee',0)"></li>
+                            <li style="background-color: #c6e48b" ng-click="setColor('#c6e48b',1)"></li>
+                            <li style="background-color: #7bc96f" ng-click="setColor('#7bc96f',2)"></li>
+                            <li style="background-color: #239a3b" ng-click="setColor('#239a3b',3)"></li>
+                            <li style="background-color: #196127" ng-click="setColor('#196127',4)"></li>
+                        </ul>More</div>
+                </div>
 
             </div>
-            <div class="contrib-footer clearfix mt-1 mx-3 px-3 pb-1">
-                <div class="float-left text-gray">
-
-                    <a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile">
-                        Learn how we count contributions</a>.
-                </div>
-                <div class="contrib-legend text-gray" title="A summary of pull requests, issues opened, and commits to the default and gh-pages branches.">
-                    Less
-                    <ul class="legend">
-                        <li style="background-color: #eee" ng-click="setColor('#eee')"></li>
-                        <li style="background-color: #c6e48b" ng-click="setColor('#c6e48b')"></li>
-                        <li style="background-color: #7bc96f" ng-click="setColor('#7bc96f')"></li>
-                        <li style="background-color: #239a3b" ng-click="setColor('#239a3b')"></li>
-                        <li style="background-color: #196127" ng-click="setColor('#196127')"></li>
-                    </ul>
-                    More
-                </div>
-            </div>
-
         </div>
     </div>
 
-    <input type="button" value="Reset" ng-click="reset('#fff')" />
+    <input type="button" value="Reset" ng-click="reset('#eee')" />
 
-
-
-    <div>
-        <label for="">From:</label>
-        <div>
-            <input id="date" type="date">
-        </div>
-    </div>
-
-    <div>
-        <label for="">To:</label>
-        <div>
-            <input id="date" type="date">
-        </div>
-    </div>
-
+    <table>
+        <tr>
+            <td>From
+                <div class="mini-help">This day should be sunday</div>
+            </td>
+            <td>To
+                <div class="mini-help">Number of weeks</div>
+            </td>
+            <td>mail</td>
+            <td>autror</td>
+            </th>
+            <tr>
+                <td>
+                    <input id="frm-date-from" type="date" ng-value="first_comit_date" />
+                </td>
+                <td>
+                    <input id="frm-weeks" type="number" max="53" ng-value="val_weeks_num" />
+                </td>
+                <td>
+                    <input id="frm-mail" type="email" ng-value="val_mail" />
+                </td>
+                <td>
+                    <input id="frm-author" ng-value="val_author" />
+                </td>
+            </tr>
+    </table>
+    <br>
 
     <input type="button" value="Generate" ng-click="generateOutput()" />
 
     <br>
+    <hr> Result image:
+    <canvas id="result-img"></canvas>
+
+
     <hr>
 
-    <textarea name="" id="" cols="30" rows="10" style="width: 90%">{{output}}</textarea>
+    <div style="width: 90%">
+        <textarea name="" id="" cols="30" rows="10" class="text-result-1">{{output}}</textarea>
+        <textarea name="" id="" cols="30" rows="10" class="text-result-2">{{output}}</textarea>
+    </div>
+
 
 </body>
 
