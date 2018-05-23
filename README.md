@@ -22,4 +22,4 @@ You will find a golang script (img-to-txt.go) that needs the image generated in 
 
 
 #### 3) Creation of the repository doing lots of commits.
-- Finally, to generate the reository take the file generated in step 2 as the source of the shell script available here: `/05-create-repo-from-coordinates/do.v5.sh`
+- Finally, to generate the reository take the file generated in step 2 as the source of the shell script available here: `/05-create-repo-from-coordinates/do.v6.sh`

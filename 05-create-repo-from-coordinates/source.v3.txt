@@ -1,0 +1,23 @@
+# ----------------------
+#  All starts here      
+# ----------------------
+#_START_DATE:06/01/2013
+# ----------------------
+
+# ------ week 1 ------
+1;0;0;25;97;39;1;color-4;11;e mail addres;your name here;null
+2;0;1;35;154;59;1;color-3;7;e mail addres;your name here;null
+3;0;2;123;201;111;1;color-2;5;e mail addres;your name here;null
+4;0;3;198;228;139;1;color-1;3;e mail addres;your name here;null
+5;0;4;235;237;240;1;color-0;0;e mail addres;your name here;null
+6;0;5;235;237;240;1;color-0;0;e mail addres;your name here;null
+7;0;6;235;237;240;1;color-0;0;e mail addres;your name here;null
+# ------ week 2 ------
+8;1;0;235;237;240;1;color-0;0;e mail addres;your name here;null
+9;1;1;235;237;240;1;color-0;0;e mail addres;your name here;null
+10;1;2;235;237;240;1;color-0;0;e mail addres;your name here;null
+11;1;3;198;228;139;1;color-1;3;e mail addres;your name here;null
+12;1;4;123;201;111;1;color-2;5;e mail addres;your name here;null
+13;1;5;35;154;59;1;color-3;7;e mail addres;your name here;null
+14;1;6;25;97;39;1;color-4;11;e mail addres;your name here;null
+# The end!

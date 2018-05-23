@@ -275,7 +275,14 @@
                         //console.log(getRGB( fill ) );
                         var col = getRGB(fill);
                         var commitDate = null;
-                        str += '\n' + cont + ';' + i + ';' + j + ';' + col.R + ';' + col.G + ';' + col.B + ';' + col.A + ';' + commitsColor + ';' + $scope.val_mail + ';' + $scope.val_author + ';' + commitDate;
+
+                        // set num of commits
+                        if ( commitsColor == 0) val_num_of_commits = 0;
+                        if ( commitsColor == 1) val_num_of_commits = 3;
+                        if ( commitsColor == 2) val_num_of_commits = 5;
+                        if ( commitsColor == 3) val_num_of_commits = 7;
+                        if ( commitsColor == 4) val_num_of_commits = 11;
+                        str += '\n' + cont + ';' + i + ';' + j + ';' + col.R + ';' + col.G + ';' + col.B + ';' + col.A + ';' + "color-" + commitsColor + ';' + val_num_of_commits + ';' + $scope.val_mail + ';' + $scope.val_author + ';' + commitDate;
                     }
                 }
                 str += '\n# The end!';
@@ -290,6 +297,10 @@
                         $(dayEl).css("fill", color);
                     }
                 }
+                $scope.output = getHeader();
+            }
+
+            $scope.resetResult = function (color) {
                 $scope.output = getHeader();
             }
 
@@ -311,7 +322,6 @@
 </head>
 
 <body ng-controller="AppController">
-
 
     <div>
         <label for="">Current color:</label>
@@ -402,6 +412,7 @@
             </td>
             <td>To
                 <div class="mini-help">Number of weeks</div>
+                <div class="mini-help">Max 100</div>
             </td>
             <td>mail</td>
             <td>autror</td>
@@ -411,7 +422,7 @@
                     <input id="frm-date-from" type="date" ng-value="first_comit_date" />
                 </td>
                 <td>
-                    <input id="frm-weeks" type="number" max="53" ng-value="val_weeks_num" />
+                    <input type="number" name="input" ng-model="val_weeks_num" min="1" max="100" required>{{val_weeks_num}}
                 </td>
                 <td>
                     <input id="frm-mail" type="email" ng-value="val_mail" />
@@ -429,14 +440,14 @@
     <hr> Result image:
     <canvas id="result-img"></canvas>
 
-
     <hr>
 
     <div style="width: 90%">
+        <input type="button" value="Reset" ng-click="resetResult('#eee')" />
+        <hr>
         <textarea name="" id="" cols="30" rows="10" class="text-result-1">{{output}}</textarea>
         <textarea name="" id="" cols="30" rows="10" class="text-result-2">{{output}}</textarea>
     </div>
-
 
 </body>
 
