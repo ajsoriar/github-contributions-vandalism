@@ -176,11 +176,162 @@
             min-height: 350px;
             position: absolute;
         }
+        .drag-zone{
+            width: 200px;
+            height: 100px;
+            border: 1px solid #b3b3b3;
+            border-radius: 10px;
+            margin: 10px;
+            background-color: #f3f3f3;
+            text-align: center;
+            line-height: 100px;
+            font-size: 11px;
+            color: gray;
+        }
     </style>
+
+    <template>
+            # git contributions image
+
+            clear
+            
+            echo "---------------" 
+            echo "- FUN!        -" 
+            echo "---------------" 
+            
+            
+            # init config vars
+            
+            var_image="null" 
+            var_repo_name="[[MAIL]]"
+            # "2012-01-15"
+            var_start_date="[[DATE]]"
+            var_author_name="[[AUTHOR]]"
+            var_author_mail="[[AUTHOR_MAIL]]"
+            var_file_name="[[FILENAME]]"
+            # "My default commit message"
+            var_commit_message="[[COMMIT_MESSAGE]]"
+            
+            
+            # ------------
+            # Create repo
+            # ------------
+            
+            echo "[1] Be happy! We are about to create the repo: " ${var_repo_name}
+            git init ${var_repo_name}
+            cd ${var_repo_name}
+            
+            
+            # -----------------
+            # Add file to repo
+            # -----------------
+            
+            echo "/* ${var_repo_name} */" > ${var_file_name}
+            
+            
+            # ---------------------------------
+            # Loop over days & commits per day
+            # ---------------------------------
+            
+            count_commmits=0
+            count_days=0
+            count_commmits_in_day=0
+            
+            IFS=';'
+            
+            pwd
+            ls -l
+            
+            var_increase_time=$((1+60*$count_commmits_in_day))
+            echo "var_increase_time: ${var_increase_time}"
+            
+            file="../source.v3.txt"
+            cat ${file}
+            while read -r f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12
+            do
+            
+                    if (test  "${f1:0:1}" = '#' ) || ( test  "${f1:0:1}" = ''  ); then
+            
+                            continue ;
+                    else
+            
+                            var_commits_per_day="0"
+            
+                            if (test  "${f8}" = 'color-0' ); then 
+                                    var_commits_per_day="0" 
+                            fi
+            
+                            if (test  "${f8}" = 'color-1' ); then 
+                                    var_commits_per_day="1"
+                            fi
+            
+                            if (test  "${f8}" = 'color-2' ); then 
+                                    var_commits_per_day="4"
+                            fi
+            
+                            if (test  "${f8}" = 'color-3' ); then 
+                                    var_commits_per_day="7"
+                            fi
+            
+                            if (test  "${f8}" = 'color-4' ); then 
+                                    var_commits_per_day="11"
+                            fi
+            
+                            printf "\n***********************************************************************************\n"
+                            printf 'Data: %s, %s, %s, %s, %s, %s, %s, %s %s, %s, %s\n' "$f1" "$f2" "$f3" "$f4" "$f5" "$f6" "$f7" "$f8" "$f9" "$f10" "$f11" "$f11"
+                            printf "Day %s has %s commits.\n" "$f1" "$var_commits_per_day"
+                            printf "***********************************************************************************\n"
+            
+                            count_days=`expr $count_days + 1` # days with 0 commits should be in the file! or the process will fail
+                            count_commmits_in_day="0";
+            
+                            if (test  "${f8}" = '0' ); then 
+            
+                                    # 5 - This works fine!
+            
+                                    # Get total seconds from 'count_days' and 'count_commmits_in_day' values
+                                    # 1 day will add 86400 seconds. 1 commit will add 60 seconds
+                                    var_increase_time=$((86400*$count_days+60*$count_commmits_in_day))
+                                    echo "var_increase_time: ${var_increase_time}"
+            
+                                    continue ; # Exit in the case of 0 commits
+                            else
+            
+                                    for (( j=0; j < $var_commits_per_day; ++j )) # commits in a day
+                                    do
+                                            count_commmits=`expr $count_commmits + 1`
+                                            count_commmits_in_day=`expr $count_commmits_in_day + 1`
+                                            printf "\nCommit number ${count_commmits}. Commit message: '${var_commit_message}'\n"
+            
+                                            # Write change to file
+                                            echo ${count_commmits} $'\r' >> ${var_file_name}
+                                            git add .
+            
+                                            var_Ymd=${var_start_date} #"2012-01-01"
+                                            var_HMS="12:00:00"
+                                            var_date=$( date -j -v +"$var_increase_time"S -f "%Y-%m-%d %H:%M:%S" "$var_Ymd $var_HMS" +%Y-%m-%dT%H:%M:%S )
+                                            echo "commit date: ${var_date}"
+            
+                                            # Do commit
+                                            git commit -m "Commit number ${count_commmits}; ${var_commit_message}" --date "${var_date}" --author="${var_author_name} <${var_author_mail}>"
+                                    done
+            
+                                    # Get total seconds from 'count_days' and 'count_commmits_in_day' values
+                                    # 1 day will add 86400 seconds. 1 commit will add 60 seconds
+                                    var_increase_time=$((86400*$count_days+60*$count_commmits_in_day))
+                                    echo "var_increase_time: ${var_increase_time}"
+                            fi
+                    fi
+                    
+            done <"$file"
+            
+            echo "done!"
+
+    </template>
 
     <script>
         var NUM_OF_WEEKS = 53;
-        var START_DATE = "06/01/2013";
+        var START_DATE = "2012-01-15" //"15/01/2012"; // 2012-01-15
 
         function getRGB(str) {
             var match = str.match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
@@ -204,18 +355,16 @@
             return h
         }
 
-
         var myApp = angular.module('myApp', []);
         myApp.controller('AppController', ['$scope', function ($scope) {
 
-            $scope.first_comit_date = START_DATE; //"06/01/2013"; // this day should be sunday
-            $scope.val_mail = "e mail addres";
-            $scope.val_author = "your name here";
-            $scope.val_weeks_num = NUM_OF_WEEKS;
 
             $scope.output = getHeader();
-
-            $scope.greeting = 'Hola!';
+            $scope.val_1st_commit_date = START_DATE; //"06/01/2013"; // this day should be sunday
+            $scope.val_mail = "mail@mail.com";
+            $scope.val_author = "Unknown Author";
+            $scope.val_weeks_num = NUM_OF_WEEKS;
+            
             $scope.contributions_num = '0';
             $scope.currentColor = {
                 color: "#196127",
@@ -223,34 +372,23 @@
             };
             $scope.lastWeek = 0;
             $scope.lastDay = 0;
+
             $scope.setColor = function (colorValue, commits) {
                 $scope.currentColor = {
                     color: colorValue,
                     commits: commits
                 };
                 console.log("$scope.currentColor:", $scope.currentColor);
-            }
+            };
+
             $scope.paint = function (lastWeek, lastDay, event) {
                 console.log("lastWeek:", lastWeek, ", lastDay:", lastDay);
                 console.log("event:", event);
                 $scope.lastWeek = lastWeek;
                 $scope.lastDay = lastDay;
-
                 $(event.target).css('fill', $scope.currentColor.color);
                 $(event.target).attr('data-commits', $scope.currentColor.commits);
-
-
-            }
-
-            /*
-				// github colors
-
-				238, 238, 238
-				198, 228, 138
-				122, 202, 111
-				36,  154, 59
-                26,  96,  39
-            */
+            };
 
             $scope.generateOutput = function () {
                 var str = '';
@@ -287,7 +425,14 @@
                 }
                 str += '\n# The end!';
                 $scope.output = $scope.output + str;
-            }
+                $scope.mail = $scope.val_mail;
+                $scope.date = $scope.val_1st_commit_date;
+                $scope.author = $scope.val_author;
+                $scope.author_mail = $scope.val_mail;
+                $scope.filename = "file.txt";
+                $scope.commit_message = "Commit message";
+                $scope.output2 = getTemplateContent( $scope.mail, $scope.date, $scope.author, $scope.author_mail, $scope.filename, $scope.commit_message );
+            };
 
             $scope.reset = function (color) {
                 for (i = 0; i < $scope.val_weeks_num; i++) {
@@ -298,30 +443,69 @@
                     }
                 }
                 $scope.output = getHeader();
-            }
+            };
 
             $scope.resetResult = function (color) {
                 $scope.output = getHeader();
-            }
+            };
 
         }]);
-        myApp.controller('GreetingController', ['$scope', function ($scope) {
-            $scope.greeting = 'Hola!';
-        }]);
+
         myApp.controller('ViewerController', ['$scope', function ($scope) {
             $scope.number = NUM_OF_WEEKS;
             $scope.getNumber = function (num) {
                 return new Array(num);
             }
         }]);
+
         myApp.controller('MenuController', ['$scope', function ($scope) {
 
         }]);
+
+        /* - read file - */
+        function readTextFile(file) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.open("GET", file, false);
+            rawFile.onreadystatechange = function (){
+                if(rawFile.readyState === 4){
+                    if(rawFile.status === 200 || rawFile.status == 0){
+                        var allText = rawFile.responseText;
+                        alert(allText);
+                    }
+                }
+            }
+            rawFile.send(null);
+        }
+
+        readTextFile('template/script.sh');
+
+
+        /* - read template - */
+
+        function getTemplateContent( mail, date, author, author_mail,filename,commit_message ) {
+            var temp = document.getElementsByTagName("template")[0].innerHTML;
+            temp = temp.replace('[[MAIL]]', mail);
+            temp = temp.replace('[[DATE]]', date);
+            temp = temp.replace('[[AUTHOR]]', author);
+            temp = temp.replace('[[AUTHOR_MAIL]]', author_mail);
+            temp = temp.replace('[[FILENAME]]', filename);
+            temp = temp.replace('[[COMMIT_MESSAGE]]', commit_message);
+            return temp
+        }
 
     </script>
 </head>
 
 <body ng-controller="AppController">
+
+    <hr> Drag a picture here:
+    
+    <div class="drag-zone">
+
+        Drag here!
+    </div>
+    <hr>
+
 
     <div>
         <label for="">Current color:</label>
@@ -412,7 +596,7 @@
             </th>
             <tr>
                 <td>
-                    <input id="frm-date-from" type="date" ng-value="first_comit_date" />
+                    <input id="frm-date-from" type="date" ng-value="val_1st_commit_date" />
                 </td>
                 <td>
                     <input type="number" name="input" ng-model="val_weeks_num" min="1" max="100" required>{{val_weeks_num}}
@@ -439,7 +623,7 @@
         <input type="button" value="Reset" ng-click="resetResult('#eee')" />
         <hr>
         <textarea name="" id="" cols="30" rows="10" class="text-result-1">{{output}}</textarea>
-        <textarea name="" id="" cols="30" rows="10" class="text-result-2">{{output}}</textarea>
+        <textarea name="" id="" cols="30" rows="10" class="text-result-2">{{output2}}</textarea>
     </div>
 
 </body>
