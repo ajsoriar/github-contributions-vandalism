@@ -278,8 +278,8 @@
 
                         // set num of commits
                         if ( commitsColor == 0) val_num_of_commits = 0;
-                        if ( commitsColor == 1) val_num_of_commits = 3;
-                        if ( commitsColor == 2) val_num_of_commits = 5;
+                        if ( commitsColor == 1) val_num_of_commits = 1;
+                        if ( commitsColor == 2) val_num_of_commits = 4;
                         if ( commitsColor == 3) val_num_of_commits = 7;
                         if ( commitsColor == 4) val_num_of_commits = 11;
                         str += '\n' + cont + ';' + i + ';' + j + ';' + col.R + ';' + col.G + ';' + col.B + ';' + col.A + ';' + "color-" + commitsColor + ';' + val_num_of_commits + ';' + $scope.val_mail + ';' + $scope.val_author + ';' + commitDate;
@@ -353,21 +353,14 @@
                     data-url="/ajsoriar" data-from="2018-05-01" data-to="2018-05-05">
                     <svg width="676" height="104" class="js-calendar-graph-svg">
                         <g transform="translate(16, 20)">
-                            <g id="week-{{$index}}" ng-attr-transform="translate({{ (($index) * 12 + 13) }} , 0)" ng-repeat="i in getNumber(number) track by $index">
-                                <rect id="week-{{$index}}-1" ng-click="paint($index,1,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
-                                    y="0" fill="#ebedf0" data-count="0" data-date="2017-04-30"></rect>
-                                <rect id="week-{{$index}}-2" ng-click="paint($index,2,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
-                                    y="12" fill="#ebedf0" data-count="0" data-date="2017-05-01"></rect>
-                                <rect id="week-{{$index}}-3" ng-click="paint($index,3,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
-                                    y="24" fill="#ebedf0" data-count="0" data-date="2017-05-02"></rect>
-                                <rect id="week-{{$index}}-4" ng-click="paint($index,4,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
-                                    y="36" fill="#ebedf0" data-count="0" data-date="2017-05-03"></rect>
-                                <rect id="week-{{$index}}-5" ng-click="paint($index,5,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
-                                    y="48" fill="#ebedf0" data-count="0" data-date="2017-05-04"></rect>
-                                <rect id="week-{{$index}}-6" ng-click="paint($index,6,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
-                                    y="60" fill="#ebedf0" data-count="0" data-date="2017-05-05"></rect>
-                                <rect id="week-{{$index}}-7" ng-click="paint($index,7,$event)" class="day" width="11" height="11" ng-attr-x="{{$index}}"
-                                    y="72" fill="#ebedf0" data-count="0" data-date="2017-05-06"></rect>
+                            <g id="week-{{$index}}" ng-attr-transform="translate({{ (($index) * 11 + 12) }} , 0)" ng-repeat="i in getNumber(number) track by $index">
+                                <rect id="week-{{$index}}-1" ng-click="paint($index,1,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="0" fill="#ebedf0" data-count="0" data-date="2017-04-30"></rect>
+                                <rect id="week-{{$index}}-2" ng-click="paint($index,2,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="12" fill="#ebedf0" data-count="0" data-date="2017-05-01"></rect>
+                                <rect id="week-{{$index}}-3" ng-click="paint($index,3,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="24" fill="#ebedf0" data-count="0" data-date="2017-05-02"></rect>
+                                <rect id="week-{{$index}}-4" ng-click="paint($index,4,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="36" fill="#ebedf0" data-count="0" data-date="2017-05-03"></rect>
+                                <rect id="week-{{$index}}-5" ng-click="paint($index,5,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="48" fill="#ebedf0" data-count="0" data-date="2017-05-04"></rect>
+                                <rect id="week-{{$index}}-6" ng-click="paint($index,6,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="60" fill="#ebedf0" data-count="0" data-date="2017-05-05"></rect>
+                                <rect id="week-{{$index}}-7" ng-click="paint($index,7,$event)" class="day" width="10" height="10" ng-attr-x="{{$index}}" y="72" fill="#ebedf0" data-count="0" data-date="2017-05-06"></rect>
                             </g>
 
                             <text ng-attr-x="{{ 25 + (52 * ($index -1 )) }}" y="-10" class="month" ng-repeat="month in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] track by $index">{{month}}</text>
