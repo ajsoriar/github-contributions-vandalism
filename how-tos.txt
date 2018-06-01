@@ -32,7 +32,15 @@
     git config --global alias.hist "log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
     git config --global alias.type 'cat-file -t'
     git config --global alias.dump 'cat-file -p'
-
+    
+    
+    # stash
+    -------
+    
+    git stash save "comment"
+    git stash list
+    git stash pop (Applies the most recently created stash)
+    git stash pop stash@{2} (Cchoose which stash to apply)
 
 / ====
 / UNIX
