@@ -6,6 +6,12 @@ This is a set of tools and scripts to do pixel-art in the contributions graph of
 
 ![github-contributions-vandalism example-2](./06-web-js-create-image/demo/002.png?raw=true "github-contributions-vandalism example-2")
 
+![github-contributions-vandalism example-3](./06-web-js-create-image/demo/003.png?raw=true "github-contributions-vandalism example-3")
+
+![github-contributions-vandalism example-4](./06-web-js-create-image/demo/004.png?raw=true "github-contributions-vandalism example-4")
+
+![github-contributions-vandalism example-5](./06-web-js-create-image/demo/005.png?raw=true "github-contributions-vandalism example-5")
+
 ### Steps:
 
 #### 1) Create the image that you want to show in github's contributions graph
@@ -22,4 +28,4 @@ You will find a golang script (img-to-txt.go) that needs the image generated in 
 
 
 #### 3) Creation of the repository doing lots of commits.
-- Finally, to generate the reository take the file generated in step 2 as the source of the shell script available here: `/05-create-repo-from-coordinates/do.v6.sh`
+- Finally, to generate the reository take the file generated in step 2 as the source of the shell script available here: `/05-create-repo-from-coordinates/do.v7.sh`
