@@ -11,7 +11,7 @@ echo "---------------"
 
 var_image="null" 
 var_repo_name="my-repo-name"
-var_start_date="2012-01-15"
+var_start_date="2012-01-01"
 var_author_name="asr"
 var_author_mail="ajsoriar@gmail.com"
 var_file_name="hello.txt"
