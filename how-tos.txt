@@ -21,6 +21,18 @@
     > git log --author="\(Andres\)\|\(asr\)" > hello2.txt
     
     
+    # Remove a file from git repository all commits
+    -----------------------------------------------
+    
+    > git filter-branch --force --index-filter \'git rm --cached --ignore-unmatch my-app-01/yarn.lock' \ --prune-empty --tag-name-filter cat -- --all
+    
+    
+    # Git commit setting message, date and author
+    ---------------------------------------------
+    
+    > git commit -a -m "my commit number 1" --date 2010-05-07T22:13:16 --author="Author Name <e-mail>"
+    
+    
     # Common aliases (For Windows)
     ------------------------------
 
