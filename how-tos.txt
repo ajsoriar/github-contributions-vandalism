@@ -53,6 +53,13 @@
     git stash list
     git stash pop (Applies the most recently created stash)
     git stash pop stash@{2} (Cchoose which stash to apply)
+    
+    
+    # Undo last commit
+    ------------------
+    
+    > git reset --soft HEAD~1
+    
 
 / ====
 / UNIX
